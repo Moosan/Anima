@@ -12,10 +12,12 @@
 		_SaturateOffset2("SaturateOffset2",float) = 0.5
 		_SaturateOffset3("SaturateOffset3",float) = 0.75
 		_BrightnessMin("BrightnessMin",float) = 0.0
-		_BrightnessValue("BrightnessValue",float) = 0.5
+		_BrightnessValue1("BrightnessValue1",float) = 0.5
+		_BrightnessValue2("BrightnessValue2",float) = 0.6
 		_BrightnessMax("BrightnessMax",float) = 1.0
 		_BrightnessOffset1("BrightnessOffset1",float) = 0.0
 		_BrightnessOffset2("BrightnessOffset2",float) = 0.0
+		_BrightnessOffset3("BrightnessOffset3",float) = 0.0
 		_HueValue("HueValue",int) = 360
 		_HueOffset("HueOffset",float) = 0.0	
 		_MaxMinValue("MaxMinValue",float) = 0.01
@@ -57,10 +59,12 @@
 			float _SaturateOffset2;
 			float _SaturateOffset3;
 			float _BrightnessMin;
-			float _BrightnessValue;
+			float _BrightnessValue1;
+			float _BrightnessValue2;
 			float _BrightnessMax;
 			float _BrightnessOffset1;
 			float _BrightnessOffset2;
+			float _BrightnessOffset3;
 			float _HueValue;
 			float _HueOffset;
 			float _MaxMinValue;
@@ -113,9 +117,12 @@
 						maxc =_BrightnessMin;
 					}
 					else if(maxc <= _BrightnessOffset2){
-						maxc = _BrightnessValue;
+						maxc = _BrightnessValue1;
 					} 
-					else{
+					else if(maxc <= _BrightnessOffset3){
+						maxc = _BrightnessValue2;
+					}
+					else {
 						maxc = _BrightnessMax;
 					}
 					
@@ -155,9 +162,12 @@
 					if(V < _BrightnessOffset1){
 						V = _BrightnessMin;
 					}
-					else if(maxc < _BrightnessOffset2){
-						V = _BrightnessValue;
+					else if(V < _BrightnessOffset2){
+						V = _BrightnessValue1;
 					} 
+					else if(V < _BrightnessOffset3){
+						V = _BrightnessValue2;
+					}
 					else{
 						V = _BrightnessMax;
 					}

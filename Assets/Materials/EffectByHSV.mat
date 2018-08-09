@@ -19,31 +19,34 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 94133de1d64c9f94fbea9bdd1dc87f13, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9d1266b50d9b2cf4ebc3f6a2595da2bb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BrightnessMax: 1
     - _BrightnessMin: 0
-    - _BrightnessOffset1: 0.45
-    - _BrightnessOffset2: 0.7
+    - _BrightnessOffset1: 0.25
+    - _BrightnessOffset2: 0.45
+    - _BrightnessOffset3: 0.85
     - _BrightnessValue: 0.5
+    - _BrightnessValue1: 0.6
+    - _BrightnessValue2: 0.85
     - _HueOffset: 0
     - _HueValue: 720
     - _LightnessOffset: 0
     - _LightnessValue: 10
     - _MaxMinValue: 0
     - _MaxSize: 8192
-    - _OutlineValue: 0.04
+    - _OutlineValue: 0.5
     - _Pixel: 128
     - _SaturateMax: 1
     - _SaturateMin: 0
     - _SaturateOffset: 0
-    - _SaturateOffset1: 0.1
-    - _SaturateOffset2: 0.4
-    - _SaturateOffset3: 0.6
+    - _SaturateOffset1: 0.13
+    - _SaturateOffset2: 0.45
+    - _SaturateOffset3: 0.7
     - _SaturateValue: 10
-    - _SaturateValue1: 0.38
-    - _SaturateValue2: 0.5
+    - _SaturateValue1: 0.4
+    - _SaturateValue2: 0.65
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
