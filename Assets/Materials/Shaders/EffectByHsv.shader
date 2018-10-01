@@ -3,7 +3,8 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_MaxSize("MaxSize",int) = 128
+		_xMaxSize("xMaxSize",int) = 128
+		_yMaxSize("yMaxSize",int) = 128
 		_SaturateMin("SaturateMin",float) = 0.0
 		_SaturateValue1("SaturateValue1",float) = 0.3
 		_SaturateValue2("SaturateValue2",float) = 0.7
@@ -18,10 +19,15 @@
 		_BrightnessOffset1("BrightnessOffset1",float) = 0.0
 		_BrightnessOffset2("BrightnessOffset2",float) = 0.0
 		_BrightnessOffset3("BrightnessOffset3",float) = 0.0
+		_BrightnessOffset4("BrightnessOffset4",float) = 0.0
+		_LineValue1("LineValue1",int) = 16
+		_LineValue2("LineValue2",int) = 16
 		_HueValue("HueValue",int) = 360
-		_HueOffset("HueOffset",float) = 0.0	
+		_HueOffset("HueOffset",float) = 0.0
 		_MaxMinValue("MaxMinValue",float) = 0.01
 		_OutlineValue("OutlineValue",float) = 0.5
+		_ShadowLineValue1("ShadowLineValue1",float) = 0.1
+		_ShadowLineValue2("ShadowLineValue2",float) = 0.1
 	}
 	SubShader
 	{
@@ -50,7 +56,8 @@
 				UNITY_FOG_COORDS(1)
 				float4 vertex : SV_POSITION;
 			};
-			int _MaxSize;
+			int _xMaxSize;
+			int _yMaxSize;
 			float _SaturateMin;
 			float _SaturateValue1;
 			float _SaturateValue2;
@@ -65,14 +72,17 @@
 			float _BrightnessOffset1;
 			float _BrightnessOffset2;
 			float _BrightnessOffset3;
+			float _BrightnessOffset4;
+			float _LineValue1;
+			float _LineValue2;
 			float _HueValue;
 			float _HueOffset;
 			float _MaxMinValue;
-			
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
-
 			float _OutlineValue;
+			float _ShadowLineValue1;
+			float _ShadowLineValue2;
 			
 			v2f vert (appdata v)
 			{
@@ -85,9 +95,10 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				
 				fixed3 baseColor = tex2D(_MainTex, i.uv);
-				fixed3 e = fixed3(1.0 / _MaxSize, -1.0 / _MaxSize, 0.0);
+				float X = i.uv.x * _xMaxSize;
+				float Y = i.uv.y * _yMaxSize;
+				fixed3 e = fixed3(1.0 / _xMaxSize, -1.0 / _yMaxSize, 0.0);
 				fixed3 right =tex2D(_MainTex, i.uv + e.xz);
 				fixed3 left = tex2D(_MainTex, i.uv + e.yz);
 				fixed3 up = tex2D(_MainTex, i.uv + e.zx);
@@ -102,8 +113,13 @@
 				float maxc;
 				minc = min(baseColor.r,min(baseColor.g,baseColor.b));
 				maxc = max(baseColor.r,max(baseColor.g,baseColor.b));
+				float newBright = baseColor.r * 0.299 + baseColor.g * 0.587 + baseColor.b * 0.114;
 				fixed3 rgb;
 				float H;
+				float shadowoffsetdown1 = _ShadowLineValue1 /2.0;
+				float shadowoffsetup1 = 1.0 - shadowoffsetdown1;
+				float shadowoffsetdown2 = _ShadowLineValue2 /2.0;
+				float shadowoffsetup2 = 1.0 - shadowoffsetdown2;
 				if( abs(maxc - minc) < _MaxMinValue)
 				{
 					/*
@@ -112,14 +128,40 @@
 					maxc = floor(maxc * _BrightnessValue)* _BrightnessValue;
 					maxc = maxc * (1.0 - _BrightnessOffset2) + _BrightnessOffset2;
 					*/
-					
 					if(maxc <= _BrightnessOffset1){
-						maxc =_BrightnessMin;
+						maxc = 0;
 					}
 					else if(maxc <= _BrightnessOffset2){
-						maxc = _BrightnessValue1;
-					} 
+						X /= _LineValue1;
+						Y /= _LineValue1;
+						float wa = X + Y;
+						float wa2 = Y - X;
+						wa = wa - floor(wa);
+						wa2 = wa2 - floor(wa2);
+						if(wa <= shadowoffsetdown1 || wa >= shadowoffsetup1){
+							maxc = 0;
+						}
+						else if(wa2 <= shadowoffsetdown1 || wa2 >= shadowoffsetup1){
+							maxc = 0;
+						}
+						else{
+							maxc = _BrightnessMin;
+						}
+						//maxc =_BrightnessMin;
+					}
 					else if(maxc <= _BrightnessOffset3){
+						X /= _LineValue2;
+						Y /= _LineValue2;
+						float wa = X + Y;
+						wa = wa - floor(wa);
+						if(wa <= shadowoffsetdown2 || wa >= shadowoffsetup2){
+							maxc = 0;
+						}else{
+							maxc = _BrightnessValue1;
+						}
+						//maxc = _BrightnessValue1;
+					} 
+					else if(maxc <= _BrightnessOffset4){
 						maxc = _BrightnessValue2;
 					}
 					else {
@@ -143,7 +185,7 @@
 					{
 						H = 60.0 * (baseColor.r - baseColor.b) / sa + 300.0;
 					}
-					float V = maxc;
+					float V = newBright;
 					float S = sa;
 					/*
 					V = V * (1.0 - _BrightnessOffset1) + _BrightnessOffset1;
@@ -158,17 +200,44 @@
 					H = floor(H * _HueValue / 360) / _HueValue * 360;
 					H += _HueOffset * 360;
 
-
-					if(V < _BrightnessOffset1){
-						V = _BrightnessMin;
+					if(V <= _BrightnessOffset1){
+						V = 0;
 					}
-					else if(V < _BrightnessOffset2){
-						V = _BrightnessValue1;
+					else if(V <= _BrightnessOffset2){
+						X /= _LineValue1;
+						Y /= _LineValue1; 
+						float wa = X + Y;
+						float wa2 = Y - X;
+						wa = wa - floor(wa);
+						wa2 = wa2 - floor(wa2);
+						if(wa <= shadowoffsetdown1 || wa >= shadowoffsetup1){
+							V = 0;
+						}
+						else if(wa2 <= shadowoffsetdown1 || wa2 >= shadowoffsetup1){
+							V = 0;
+						}
+						else{
+							V = _BrightnessMin;
+						}
+						//V = _BrightnessMin;
+					}
+					else if(V <= _BrightnessOffset3){
+						X /= _LineValue2;
+						Y /= _LineValue2; 
+						float wa = X + Y;
+						wa = wa - floor(wa);
+						if(wa <= shadowoffsetdown2 || wa >= shadowoffsetup2){
+							V = 0;
+						}else{
+							V = _BrightnessValue1;
+						}
+						//V = _BrightnessValue1;
 					} 
-					else if(V < _BrightnessOffset3){
+					else if(V < _BrightnessOffset4){
 						V = _BrightnessValue2;
 					}
 					else{
+						//V = 1.0;
 						V = _BrightnessMax;
 					}
 					

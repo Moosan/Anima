@@ -24,29 +24,38 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BrightnessMax: 1
-    - _BrightnessMin: 0
-    - _BrightnessOffset1: 0.25
-    - _BrightnessOffset2: 0.45
-    - _BrightnessOffset3: 0.85
+    - _BrightnessMin: 0.6
+    - _BrightnessOffset1: 0.025
+    - _BrightnessOffset2: 0.05
+    - _BrightnessOffset3: 0.1
+    - _BrightnessOffset4: 0.6
     - _BrightnessValue: 0.5
     - _BrightnessValue1: 0.6
-    - _BrightnessValue2: 0.85
+    - _BrightnessValue2: 0.6
     - _HueOffset: 0
-    - _HueValue: 720
+    - _HueValue: 360
     - _LightnessOffset: 0
     - _LightnessValue: 10
+    - _LineValue1: 15
+    - _LineValue2: 20
+    - _LineValue3: 0
     - _MaxMinValue: 0
     - _MaxSize: 8192
-    - _OutlineValue: 0.5
+    - _OutlineValue: 0.6
     - _Pixel: 128
-    - _SaturateMax: 1
+    - _SaturateMax: 0.7
     - _SaturateMin: 0
     - _SaturateOffset: 0
-    - _SaturateOffset1: 0.13
-    - _SaturateOffset2: 0.45
-    - _SaturateOffset3: 0.7
+    - _SaturateOffset1: 0.09
+    - _SaturateOffset2: 0.6
+    - _SaturateOffset3: 0.8
     - _SaturateValue: 10
-    - _SaturateValue1: 0.4
-    - _SaturateValue2: 0.65
+    - _SaturateValue1: 0.3
+    - _SaturateValue2: 0.5
+    - _ShadowLineValue: 0.4
+    - _ShadowLineValue1: 0.5
+    - _ShadowLineValue2: 0.5
+    - _xMaxSize: 2048
+    - _yMaxSize: 2048
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

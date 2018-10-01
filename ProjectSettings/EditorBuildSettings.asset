@@ -4,4 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/AnimaForAndroid.unity
+    guid: 1ef0a0c16b99dd0498521211dc3c7460
+  m_configObjects: {}
