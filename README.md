@@ -1,2 +1,2 @@
 # Anima
-[リンク](https://Moosan.github.io/Anima/)
+[リンク](https://moosan.github.io/Anima/)
