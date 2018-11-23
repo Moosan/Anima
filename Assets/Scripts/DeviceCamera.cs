@@ -7,21 +7,34 @@ public class DeviceCamera : MonoBehaviour {
 
     private RawImage cameraImage;
     private WebCamTexture webCamTexture;
-    private AspectRatioFitter aspectRatioFitter;
+    private AspectRatioFitter cameraAspectRatioFitter;
+    private AspectRatioFitter animaAspectRatioFitter;
     [SerializeField]
     private int cameraIndex;
+    [SerializeField]
+    private RawImage animaImage;
+    [SerializeField]
+    private Camera objCamera;
+    [SerializeField]
+    private Camera videoCamera;
+
+    private int thisWidth;
+    private int thisHeight;
 
     void Awake()
     {
         cameraImage = GetComponent<RawImage>();
-        aspectRatioFitter = GetComponent<AspectRatioFitter>();
+        cameraAspectRatioFitter = GetComponent<AspectRatioFitter>();
+        animaAspectRatioFitter = animaImage.GetComponent<AspectRatioFitter>();
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
     void Start()
     {
         //StartCoroutine("cameraStart");
-        webCamTexture = new WebCamTexture(WebCamTexture.devices[cameraIndex].name,Screen.currentResolution.width, Screen.currentResolution.height, 60);
+        thisWidth = Screen.currentResolution.width;
+        thisHeight = Screen.currentResolution.height;
+        webCamTexture = new WebCamTexture(WebCamTexture.devices[cameraIndex].name, thisWidth, thisHeight, 60);
         cameraImage.texture = webCamTexture;
         /*
         if (Application.platform == RuntimePlatform.IPhonePlayer)
@@ -30,19 +43,22 @@ public class DeviceCamera : MonoBehaviour {
         }
         */
         webCamTexture.Play();
+
+        animaImage.texture.height = thisWidth;
+        animaImage.texture.width = thisHeight;
     }
     
     private void Update()
     {
-        if (webCamTexture.isPlaying)
+
+        thisWidth = Screen.currentResolution.width;
+        thisHeight = Screen.currentResolution.height;
+        float ratio = (float)thisHeight / (float)thisWidth;
+        cameraAspectRatioFitter.aspectRatio = ratio;
+        animaAspectRatioFitter.aspectRatio = ratio;
+        /*if (webCamTexture.isPlaying)
         {
             transform.localEulerAngles = new Vector3(0, 0, -1 * (float)webCamTexture.videoRotationAngle);
-            aspectRatioFitter.aspectRatio = (float)webCamTexture.width / (float)webCamTexture.height;
-        }
-    }
-    private void LateUpdate()
-    {
-        cameraImage.material.SetInt("xMaxSize", Screen.currentResolution.height);
-        cameraImage.material.SetInt("yMaxSize", Screen.currentResolution.height);
+        }*/
     }
 }

@@ -95,7 +95,8 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed3 baseColor = tex2D(_MainTex, i.uv);
+				fixed3 baseColor = fixed3(0,0,0);
+				//fixed3 baseColor = tex2D(_MainTex,i.uv);
 				float X = i.uv.x * _xMaxSize;
 				float Y = i.uv.y * _yMaxSize;
 				fixed3 e = fixed3(1.0 / _xMaxSize, -1.0 / _yMaxSize, 0.0);
@@ -109,6 +110,10 @@
 				fixed3 rightdown = tex2D(_MainTex, i.uv + e.xy);
 				//baseColor = (baseColor + right + left + up + down) / 5.0;
 				baseColor = (4 * baseColor + 2 * right + 2 * left + 2 * up + 2 * down + rightdown + rightup + leftup + leftdown) / 16.0;
+				//baseColor = (baseColor + right + left + up + down + rightdown + rightup + leftup + leftdown) / 9.0;
+				
+				
+				
 				float minc;
 				float maxc;
 				minc = min(baseColor.r,min(baseColor.g,baseColor.b));
